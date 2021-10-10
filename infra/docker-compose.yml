@@ -1,0 +1,23 @@
+version: '3'
+services:
+  fluentd:
+    build: ./fluentd
+    platform: linux/x86_64
+    ports:
+      - '24224:24224'
+      - '24224:24224/udp'
+    volumes:
+      - ./fluentd/conf:/fluentd/etc
+    env_file:
+      - .env.example
+  mongo:
+    image: mongo
+    volumes:
+      - fluentd-mongo:/data/db
+    ports:
+      - 27017:27017
+    environment:
+      TZ: Asia/Tokyo
+
+volumes:
+  fluentd-mongo:
